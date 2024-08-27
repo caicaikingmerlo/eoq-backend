@@ -22,14 +22,13 @@ let UserController = class UserController {
         this.userService = userService;
     }
     async createUser(userData) {
-        console.log(userData);
         const existingUser = await this.userService.getUserByEmail(userData.email);
         if (existingUser) {
             throw new common_1.BadRequestException('Email já está em uso.');
         }
         const hashedPassword = await bcrypt.hash(userData.password, 10);
         const user = await this.userService.createUser({
-            ...userData,
+            email: userData.email,
             password: hashedPassword,
         });
         const { password, ...result } = user;

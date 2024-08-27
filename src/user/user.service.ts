@@ -11,11 +11,7 @@ export class UserService {
   // Criar um novo usuário
   async createUser(data: Prisma.UserCreateInput): Promise<any> {
     // Gerar o hash da senha usando bcrypt
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
-    // Substituir a senha no input com a senha hasheada
-    const userData = { ...data, password: hashedPassword };
-
+    const userData = { email:data.email,password: data.password };
     // Criar o usuário no banco de dados
     return this.prisma.user.create({
       data: userData,
@@ -32,7 +28,7 @@ export class UserService {
   // Buscar um usuário pelo email
   async getUserByEmail(email: string) {
     return this.prisma.user.findUnique({
-      where: { email },
+      where: { email:email },
     });
   }
 

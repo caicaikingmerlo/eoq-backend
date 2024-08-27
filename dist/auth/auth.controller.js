@@ -15,11 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
-const jwt_1 = require("@nestjs/jwt");
 let AuthController = class AuthController {
-    constructor(authService, jwtService) {
+    constructor(authService) {
         this.authService = authService;
-        this.jwtService = jwtService;
     }
     async login(body) {
         const { email, password } = body;
@@ -28,14 +26,13 @@ let AuthController = class AuthController {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         const payload = { email: user.email, sub: user.id };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
+        const token = await this.authService.generateToken(email);
+        return { 'token': token };
     }
 };
 exports.AuthController = AuthController;
 __decorate([
-    (0, common_1.Post)('login'),
+    (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -43,6 +40,6 @@ __decorate([
 ], AuthController.prototype, "login", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService, jwt_1.JwtService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

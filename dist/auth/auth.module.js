@@ -18,7 +18,8 @@ exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         providers: [auth_service_1.AuthService, user_service_1.UserService, prisma_service_1.PrismaService],
-        controllers: [auth_controller_1.AuthController],
+        exports: [auth_service_1.AuthService],
+        controllers: [auth_controller_1.AuthController]
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

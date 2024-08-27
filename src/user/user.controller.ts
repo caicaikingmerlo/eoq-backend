@@ -8,17 +8,15 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post('/create') // Definindo o método HTTP POST
   async createUser(@Body() userData: Prisma.UserCreateInput) {
-    console.log(userData);
     const existingUser = await this.userService.getUserByEmail(userData.email);
     if (existingUser) {
       throw new BadRequestException('Email já está em uso.');
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = await this.userService.createUser({
-      ...userData,
+      email: userData.email,
       password: hashedPassword,
     });
-
     const { password, ...result } = user;
     return result;
   }
